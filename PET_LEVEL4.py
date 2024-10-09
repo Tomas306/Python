@@ -128,6 +128,7 @@ def main():
         print(f"Celkové kalórie potrebné: {total_calories}.")
 
         # Ukončenie programu po vykonaní výpočtov
+        input("Stlač Enter na ukončenie programu...")
         break  # Ukončite program po vykonaní výpočtov
 
 
