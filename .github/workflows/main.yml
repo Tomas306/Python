@@ -24,7 +24,7 @@ jobs:
 
     - name: Convert to EXE
       run: |
-        pyinstaller --onefile --clean PET_LEVEL4.py
+        pyinstaller --onefile --clean PET_LEVEL15_.py
         dir dist  # Zobraz obsah adresára dist
 
     - name: Upload EXE
