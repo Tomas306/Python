@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest  # Zmeň na Windows
 
     steps:
     - name: Checkout repository
@@ -25,11 +25,10 @@ jobs:
     - name: Convert to EXE
       run: |
         pyinstaller --onefile --clean PET_LEVEL4.py
-        ls dist  # Zobraz obsah adresára dist
-        cat dist/PET_LEVEL4.log || echo "No log file generated"
+        dir dist  # Zobraz obsah adresára dist
 
     - name: Upload EXE
       uses: actions/upload-artifact@v3
       with:
         name: exe-file
-        path: dist/PET_LEVEL4.exe  # Uprav názov, ak sa vytvára iný súbor
+        path: dist/PET_LEVEL4.exe  # Tu sa hľadá súbor s príponou .exe
