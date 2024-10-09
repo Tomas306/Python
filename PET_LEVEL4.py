@@ -33,7 +33,6 @@ food_items = {
     "sušienky": 15
 }
 
-
 # Funkcia pre výber potravín
 def get_selected_food(choice):
     if choice == 1:
@@ -49,25 +48,47 @@ def get_selected_food(choice):
     else:
         return []
 
-
 # Funkcia pre skloňovanie
 def decline_item(item, count):
     if item == "sušienky":
-        return f"{count} sušienka" if count == 1 else f"{count} sušienok"
+        if count == 1:
+            return f"{count} sušienka"
+        elif 2 <= count <= 4:
+            return f"{count} sušienky"
+        else:
+            return f"{count} sušienok"
     elif item == "šunky":
-        return f"{count} šunka" if count == 1 else f"{count} šuniek"
+        if count == 1:
+            return f"{count} šunka"
+        elif 2 <= count <= 4:
+            return f"{count} šunky"
+        else:
+            return f"{count} šuniek"
     elif item == "stehienko":
-        return f"{count} stehienko" if count == 1 else f"{count} stehienok"
+        if count == 1:
+            return f"{count} stehienko"
+        elif 2 <= count <= 4:
+            return f"{count} stehienka"
+        else:
+            return f"{count} stehienok"
     elif item == "steak":
-        return f"{count} steak" if count == 1 else f"{count} steakov"
+        if count == 1:
+            return f"{count} steak"
+        elif 2 <= count <= 4:
+            return f"{count} steaky"
+        else:
+            return f"{count} steakov"
     elif item == "pečené kura":
-        return f"{count} pečené kura" if count == 1 else f"{count} pečených kurčiat"
-
-
+        if count == 1:
+            return f"{count} pečené kura"
+        elif 2 <= count <= 4:
+            return f"{count} pečené kurčatá"
+        else:
+            return f"{count} pečených kurčiat"
 # Hlavná funkcia pre zadanie levelov
 def main():
     while True:
-        print("Vyber si možnosti kŕmenia:")
+        print("Vyber si možnosti kŕmenia (1-5):")
         print("1 - Sušienky")
         print("2 - Sušienky a šunky")
         print("3 - Sušienky, šunky a stehienko")
@@ -82,17 +103,36 @@ def main():
             print("Neplatná voľba. Zvoľ prosím možnosť od 1 do 5.")
             continue  # Opakuj cyklus, ak je voľba neplatná
 
-        print("Zadaj svoj aktuálny level:")
-        current_level = int(input())
+        # Overenie aktuálneho levelu
+        while True:
+            print("Zadaj svoj aktuálny level (0-150):")
+            current_level = int(input())
+            if 0 <= current_level <= 150:
+                break
+            else:
+                print("Neplatný level. Zadaj hodnotu medzi 0 a 150.")
 
-        print("Zadaj cieľový level:")
-        target_level = int(input())
+        # Overenie cieľového levelu
+        while True:
+            print("Zadaj cieľový level (0-150, musí byť vyšší ako aktuálny level):")
+            target_level = int(input())
+            if 0 <= target_level <= 150 and target_level > current_level:
+                break
+            else:
+                print(f"Neplatný cieľový level. Zadaj hodnotu medzi 0 a 150, ktorá je vyššia ako aktuálny level ({current_level}).")
 
-        print("Koľko krmení zvládneš za 24 hodín?")
-        feedings_per_day = int(input())
+        # Overenie počtu kŕmení za deň
+        while True:
+            print("Koľko krmení zvládneš za 24 hodín? (1-12):")
+            feedings_per_day = int(input())
+            if 1 <= feedings_per_day <= 12:
+                break
+            else:
+                print("Neplatný počet krmení. Zadaj hodnotu medzi 1 a 12.")
 
         total_item_counts = {item: 0 for item in selected_items}
         total_calories = 0
+        level_items_used = {}  # Sledovanie položiek pre jednotlivé levely
 
         # Sčítanie potrebných položiek pre každý level
         for level in range(current_level + 1, target_level + 1):
@@ -102,16 +142,19 @@ def main():
 
                 # Rozdelenie kalórií medzi vybrané potraviny, začínajúc od najvyššej kalórie
                 remaining_calories = calories
+                level_items_used[level] = {item: 0 for item in selected_items}  # Pre každý level
 
                 # Rozdelenie kalórií podľa vybraných potravín
                 for item in sorted(selected_items, key=lambda x: food_items[x], reverse=True):
                     while remaining_calories >= food_items[item]:
                         total_item_counts[item] += 1
+                        level_items_used[level][item] += 1  # Sledujeme položky pre tento level
                         remaining_calories -= food_items[item]
 
                 # Ak zostanú kalórie, pridá sa sušienka
                 if remaining_calories > 0 and remaining_calories <= 15:
                     total_item_counts["sušienky"] += 1  # Pridá sušienku
+                    level_items_used[level]["sušienky"] += 1  # Sledujeme sušienky pre tento level
 
         # Výpočet celkového krmiva potrebného a dní potrebných na krmenie
         total_feedings_needed = sum(total_item_counts[item] for item in total_item_counts)
@@ -123,14 +166,40 @@ def main():
             if count > 0:
                 output.append(decline_item(item, count))
 
-        print(f"Na dosiahnutie levelu {target_level} potrebujete:")
+                # Výpočet počtu potrebných sušienok a ich ekvivalent
+            cookie_count = total_item_counts["sušienky"]
+
+
+        # Výpočet potrebných sušienok
+        total_cookies_needed = 0
+        for item in total_item_counts:
+            if item == "pečené kura":
+                total_cookies_needed += total_item_counts[item] * 81
+            elif item == "steak":
+                total_cookies_needed += total_item_counts[item] * 27
+            elif item == "stehienko":
+                total_cookies_needed += total_item_counts[item] * 9
+            elif item == "šunky":
+                total_cookies_needed += total_item_counts[item] * 3
+            elif item == "sušienky":
+                total_cookies_needed += total_item_counts[item]
+
+        # Výpis položiek pre každý level
+        print("\nPoložky použité pre jednotlivé levely:")
+        for level, items in level_items_used.items():
+            item_output = [decline_item(item, count) for item, count in items.items() if count > 0]
+            print(f"Level {level}: {', '.join(item_output)}")
+
+        print(f"\nNa dosiahnutie levelu {target_level} potrebujete:")
         print(", ".join(output))
         print(f"Celkové kalórie potrebné: {total_calories}.")
+        print(f"Počet kŕmení potrebných: {total_feedings_needed}, čo bude trvať {total_days_needed} dní.")
+        print(f"Celkový počet potrebných sušienok: {total_cookies_needed}")
 
-        # Ukončenie programu po vykonaní výpočtov
-        input("Stlač Enter na ukončenie programu...")
-        break  # Ukončite program po vykonaní výpočtov
-
+        # Spýtaj sa, či chceš pokračovať
+        repeat = input("Chceš pokračovať? (Y/N): ")
+        if repeat.lower() != "y":
+            break
 
 # Spustenie hlavnej funkcie
 main()
