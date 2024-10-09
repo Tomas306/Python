@@ -24,7 +24,7 @@ jobs:
 
     - name: Convert to EXE
       run: |
-        pyinstaller --onefile PET_LEVEL4.py  # Nahraď PET_LEVEL4.py názvom svojho skriptu
+        pyinstaller --onefile --clean PET_LEVEL4.py  # Nahraď PET_LEVEL4.py názvom svojho skriptu
 
     - name: List files in dist directory
       run: |
