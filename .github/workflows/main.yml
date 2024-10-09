@@ -24,10 +24,14 @@ jobs:
 
     - name: Convert to EXE
       run: |
-        pyinstaller --onefile PET_LEVEL4.py  # Nahraď your_script.py názvom svojho skriptu
+        pyinstaller --onefile PET_LEVEL4.py  # Nahraď PET_LEVEL4.py názvom svojho skriptu
+
+    - name: List files in dist directory
+      run: |
+        ls dist  # Zobraz obsah adresára dist
 
     - name: Upload EXE
       uses: actions/upload-artifact@v3
       with:
         name: exe-file
-        path: dist/PET_LEVEL.exe  # Zmeň to na názov svojho .exe súboru
+        path: dist/PET_LEVEL4.exe  # Zmeň to na názov svojho .exe súboru
