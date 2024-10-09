@@ -1,0 +1,33 @@
+name: Convert Python to EXE
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'  # Zvoľ verziu Pythonu
+
+    - name: Install dependencies
+      run: |
+        pip install pyinstaller
+
+    - name: Convert to EXE
+      run: |
+        pyinstaller --onefile PET_LEVEL4.py  # Nahraď your_script.py názvom svojho skriptu
+
+    - name: Upload EXE
+      uses: actions/upload-artifact@v2
+      with:
+        name: exe-file
+        path: dist/PET_LEVEL.exe  # Zmeň to na názov svojho .exe súboru
