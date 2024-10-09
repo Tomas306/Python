@@ -26,10 +26,7 @@ jobs:
       run: |
         pyinstaller --onefile --clean PET_LEVEL4.py
         ls dist  # Zobraz obsah adresára dist
-
-    - name: List files in dist directory
-      run: |
-        ls dist  # Zobraz obsah adresára dist
+        cat dist/PET_LEVEL4.log || echo "No log file generated"
 
     - name: Upload EXE
       uses: actions/upload-artifact@v3
