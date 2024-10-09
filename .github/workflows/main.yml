@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest  # Zmeň na Windows
+    runs-on: windows-latest  # Použiť Windows
 
     steps:
     - name: Checkout repository
@@ -28,7 +28,7 @@ jobs:
         dir dist  # Zobraz obsah adresára dist
 
     - name: Upload EXE
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4  # Aktualizované na v4
       with:
         name: exe-file
-        path: dist/PET_LEVEL4.exe  # Tu sa hľadá súbor s príponou .exe
+        path: dist/PET_LEVEL4.exe  # Cesta k .exe súboru
